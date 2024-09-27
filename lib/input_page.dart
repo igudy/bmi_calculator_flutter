@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+// Values that will never change use the "const" keyword, while values
+// that change in runtime use the "final" keyword
+// Use DRY Principle always, Do Not Repeat Yourself.
+
+const bottomContainerHeight = 80.0;
+const activeCardColour = Color(0xFF1D1E33);
+const bottomContainerColor = Color(0xFFEB1555);
 
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
@@ -34,43 +43,89 @@ class _TopBoxesState extends State<AllBody> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          // Expands the Row to take available vertical space
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Expanded(
+              const Expanded(
                 child: ReusableCard(
-                  colour: const Color(0xFF1D1E33),
+                  colour: activeCardColour,
+                  cardChild: IconContent(
+                    icon: FontAwesomeIcons.mars,
+                    label: "MALE",
+                  ),
                 ),
               ),
-              Expanded(
+              const Expanded(
                 child: ReusableCard(
-                  colour: const Color(0xFF1D1E33),
+                  colour: activeCardColour,
+                  cardChild: IconContent(
+                    icon: FontAwesomeIcons.venus,
+                    label: "FEMALE",
+                  ),
                 ),
               ),
             ],
           ),
         ),
-        Expanded(
+        const Expanded(
           child: ReusableCard(
-            colour: const Color(0xFF1D1E33),
+            colour: activeCardColour,
+            cardChild: SizedBox.shrink(),
           ),
         ),
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
+            children: const [
               Expanded(
                 child: ReusableCard(
-                  colour: const Color(0xFF1D1E33),
+                  colour: activeCardColour,
+                  cardChild: SizedBox.shrink(),
                 ),
               ),
               Expanded(
                 child: ReusableCard(
-                  colour: const Color(0xFF1D1E33),
+                  colour: activeCardColour,
+                  cardChild: SizedBox.shrink(),
                 ),
               ),
             ],
+          ),
+        ),
+        Container(
+          color: bottomContainerColor,
+          margin: const EdgeInsets.only(top: 10.0),
+          width: double.infinity,
+          height: bottomContainerHeight,
+        ),
+      ],
+    );
+  }
+}
+
+class IconContent extends StatelessWidget {
+  const IconContent({super.key, required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(
+          icon,
+          size: 80.0,
+        ),
+        const SizedBox(
+          height: 15.0,
+        ),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 18.0,
+            color: Color(0xFF8D8E98),
           ),
         ),
       ],
@@ -79,11 +134,14 @@ class _TopBoxesState extends State<AllBody> {
 }
 
 class ReusableCard extends StatelessWidget {
-  // const ReusableCard({super.key})
-
-  ReusableCard({super.key, required this.colour});
+  const ReusableCard({
+    super.key,
+    required this.colour,
+    required this.cardChild,
+  });
 
   final Color colour;
+  final Widget cardChild;
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +153,7 @@ class ReusableCard extends StatelessWidget {
       ),
       height: 200.0,
       width: 170.0,
+      child: cardChild,
     );
   }
 }
