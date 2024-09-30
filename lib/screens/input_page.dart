@@ -1,10 +1,10 @@
-import 'package:bmi_cal/results_page.dart';
+import 'results_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'icon_content.dart';
-import 'reusable_card.dart';
-import 'constants.dart';
-import 'results_page.dart';
+import '../components/icon_content.dart';
+import '../components/reusable_card.dart';
+import '../constants.dart';
+import '../components/round_icon_button.dart';
 
 enum Gender { male, female }
 
@@ -37,10 +37,7 @@ class AllBody extends StatefulWidget {
 }
 
 class _TopBoxesState extends State<AllBody> {
-  Color maleCardColour = kInactiveCardColour;
-  Color femaleCardColour = kInactiveCardColour;
-
-  Gender? selectedGender; // Nullable to handle initial state
+  Gender? selectedGender;
   int height = 180;
   int weight = 60;
   int age = 20;
@@ -53,7 +50,6 @@ class _TopBoxesState extends State<AllBody> {
       children: [
         Expanded(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
                 child: ReusableCard(
@@ -92,11 +88,6 @@ class _TopBoxesState extends State<AllBody> {
         ),
         Expanded(
           child: ReusableCard(
-            onPress: () {
-              setState(() {
-                print("Middle pressed");
-              });
-            },
             colour: kActiveCardColour,
             cardChild: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -111,10 +102,7 @@ class _TopBoxesState extends State<AllBody> {
                       height.toString(),
                       style: kNumberTextStyle,
                     ),
-                    const Text(
-                      'cm',
-                      style: kLabelTextStyle,
-                    )
+                    const Text('cm', style: kLabelTextStyle),
                   ],
                 ),
                 SliderTheme(
@@ -146,27 +134,15 @@ class _TopBoxesState extends State<AllBody> {
         ),
         Expanded(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
                 child: ReusableCard(
                   colour: kActiveCardColour,
-                  onPress: () {
-                    setState(() {
-                      print("Left box pressed");
-                    });
-                  },
                   cardChild: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      const Text(
-                        "WEIGHT",
-                        style: kLabelTextStyle,
-                      ),
-                      Text(
-                        weight.toString(),
-                        style: kNumberTextStyle,
-                      ),
+                      const Text("WEIGHT", style: kLabelTextStyle),
+                      Text(weight.toString(), style: kNumberTextStyle),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -178,9 +154,7 @@ class _TopBoxesState extends State<AllBody> {
                               });
                             },
                           ),
-                          const SizedBox(
-                            width: 10.0,
-                          ),
+                          const SizedBox(width: 10.0),
                           RoundIconButton(
                             icon: FontAwesomeIcons.plus,
                             onPressed: () {
@@ -197,39 +171,24 @@ class _TopBoxesState extends State<AllBody> {
               ),
               Expanded(
                 child: ReusableCard(
-                  onPress: () {
-                    setState(() {
-                      print("Right box pressed");
-                    });
-                  },
                   colour: kActiveCardColour,
                   cardChild: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      const Text(
-                        "AGE",
-                        style: kLabelTextStyle,
-                      ),
-                      Text(
-                        age.toString(),
-                        style: kNumberTextStyle,
-                      ),
+                      const Text("AGE", style: kLabelTextStyle),
+                      Text(age.toString(), style: kNumberTextStyle),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           RoundIconButton(
                             icon: FontAwesomeIcons.minus,
                             onPressed: () {
-                              setState(
-                                () {
-                                  age--;
-                                },
-                              );
+                              setState(() {
+                                age--;
+                              });
                             },
                           ),
-                          const SizedBox(
-                            width: 10.0,
-                          ),
+                          const SizedBox(width: 10.0),
                           RoundIconButton(
                             icon: FontAwesomeIcons.plus,
                             onPressed: () {
@@ -247,43 +206,46 @@ class _TopBoxesState extends State<AllBody> {
             ],
           ),
         ),
-        GestureDetector(
+        BottomButton(
+          buttonTitle: 'CALCULATE',
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ResultsPage()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ResultsPage(),
+              ),
+            );
           },
-          child: Container(
-            child: Text("CALCULATE"),
-            color: kBottomContainerColour,
-            margin: const EdgeInsets.only(top: 10.0),
-            width: double.infinity,
-            height: kBottomContainerHeight,
-          ),
         ),
       ],
     );
   }
 }
 
-class RoundIconButton extends StatelessWidget {
-  const RoundIconButton(
-      {super.key, required this.icon, required this.onPressed});
+class BottomButton extends StatelessWidget {
+  const BottomButton(
+      {super.key, required this.onTap, required this.buttonTitle});
 
-  final IconData icon;
-  final VoidCallback onPressed; // Fixed: Use VoidCallback for onPressed
+  final VoidCallback onTap;
+  final String buttonTitle;
 
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      elevation: 0.0,
-      child: Icon(icon),
-      onPressed: onPressed, // This now works as expected
-      constraints: const BoxConstraints.tightFor(
-        width: 56.0,
-        height: 56.0,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        color: kBottomContainerColour,
+        margin: const EdgeInsets.only(top: 10.0),
+        padding: const EdgeInsets.only(bottom: 20.0),
+        width: double.infinity,
+        height: kBottomContainerHeight,
+        child: Center(
+          child: Text(
+            buttonTitle,
+            style: kLargeButtonTextStyle,
+          ),
+        ),
       ),
-      shape: const CircleBorder(),
-      fillColor: const Color(0xFF4C4F5E),
     );
   }
 }
